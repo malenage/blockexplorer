@@ -1,0 +1,10 @@
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Build Project",
+    "program": "${workspaceFolder}/src/index.js",
+    "sourceMaps": true,
+    "smartStep": true,
+    "internalConsoleOptions": "openOnSessionStart",
+    "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+}
