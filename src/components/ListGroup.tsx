@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 interface ListGroupProps {
-    items: string[];
+    items: string[] | number[] | Object[];
     heading: string;
-    onSelectItem: (item: string) => void;
+    onSelectItem: (item: string | number | Object) => void;
 }
 function ListGroup({items, heading, onSelectItem}: ListGroupProps) {
     // Hook

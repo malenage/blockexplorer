@@ -1,4 +1,4 @@
-import { Alchemy, Network, AssetTransfersCategory, AssetTransfersResponse } from 'alchemy-sdk';
+import { Alchemy, Network, AssetTransfersCategory, AssetTransfersResponse, TransactionReceipt } from 'alchemy-sdk';
 import { useEffect, useState, FormEvent} from 'react';
 import ListGroup from './components/ListGroup';
 import './App.css';
@@ -35,14 +35,16 @@ interface Block {
 }
 
 interface Transaction {
-  hash: string;
-  blockHash: string;
-  blockNum: number;
-  from: string;
-  to: string;
-  value: number;
-  asset: string;
-  category: string;
+  hash?: string;
+  transactionHash?: string;
+  blockHash?: string;
+  blockNum?: number;
+  from?: string;
+  to?: string;
+  value?: number;
+  asset?: string;
+  category?: string;
+  contractAddress?: string;
 }
 
 function App() {
@@ -52,10 +54,9 @@ function App() {
   const [alertTransactionVisible, setalertTransactionVisible] = useState(false);
   const [address, setAddress] = useState('');
   const [ethBalance, setEthBalance] = useState<number | undefined>();
-  const [balance, setBalance] = useState<Array<string> | undefined>(['']);
-  // const [addressTransactions, setAddressTransactions] = useState<AssetTransfersResponse | undefined>();
-  const [addressTransactions, setAddressTransactions] = useState();
-  const [transaction, setTransaction] = useState({transactionHash: '', from: '', to: '', contractAddress:'', value: ''});
+  const [balance, setBalance] = useState<Array<string>>(['']);
+  const [addressTransactions, setAddressTransactions] = useState<AssetTransfersResponse | undefined>();
+  const [transaction, setTransaction] = useState<Transaction | TransactionReceipt | undefined>({transactionHash: '', from: '', to: '', contractAddress:'', value: 0});
 
   useEffect(() => {
     async function getBlockNumber() {
@@ -72,7 +73,6 @@ function App() {
 
   let blocks = [blockNumber, blockNumber -1, blockNumber -2, blockNumber -3, blockNumber-4];
   let transactionss = latestBlock?.transactions ? latestBlock.transactions : [];
-  // console.log(transactionss);
   transactionss = transactionss.map((trans: any) => trans.hash);
   transactionss = transactionss.slice(0,5);
   let addressBalances: string[] = [];
@@ -122,9 +122,7 @@ function App() {
     const transactionInfo = await alchemy.core.getTransactionReceipt(transactionHash);
     setalertVisible(false);
     setalertTransactionVisible(true);
-    // console.log('transactionInfo ' + JSON.stringify(transactionInfo));
     setTransaction(transactionInfo);
-    // console.log('transaction ' + JSON.stringify(transaction));
   };
   
   return <div>
